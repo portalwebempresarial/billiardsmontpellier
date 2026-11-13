@@ -157,6 +157,7 @@
             letter-spacing: 1px;
             font-size: 14px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         .btn-hero-secondary:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px rgba(0, 216, 214, 0.5); }
 
@@ -251,7 +252,7 @@
         .bg-normal { background: linear-gradient(45deg, #8e44ad, #9b59b6); }
         .bg-amateur { background: linear-gradient(45deg, #0fbcf9, #4bcffa); }
 
-        /* MODAL DE EDICIÓN */
+        /* MODAL DE EDICIÓN Y CERTIFICADOS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-content { width: 90%; max-width: 500px; position: relative; }
 
@@ -273,8 +274,9 @@
         .jugador-info { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: bold; }
         
         .inputs-marcador { display: flex; justify-content: space-between; margin-top: 10px; gap: 10px; }
-        .input-score { width: 45%; text-align: center; font-size: 18px; font-weight: bold; background: rgba(255,255,255,0.9); color: #000; border-radius: 5px; border:none; }
-        .btn-guardar-score { background: #05c46b; border: none; color: white; width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .input-score { width: 100%; text-align: center; font-size: 18px; font-weight: bold; background: rgba(255,255,255,0.9); color: #000; border-radius: 5px; border:none; padding: 8px; }
+        .input-tacada { width: 100%; text-align: center; font-size: 13px; margin-top: 4px; background: rgba(0, 216, 214, 0.15); color: #fff; border: 1px solid var(--accent); border-radius: 4px; padding: 6px; }
+        .btn-guardar-score { background: #05c46b; border: none; color: white; width: 100%; padding: 8px; margin-top: 8px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
         .btn-guardar-score:hover { filter: brightness(1.1); box-shadow: 0 0 10px #05c46b; }
         
         /* BOTÓN CORREGIR SCORE */
@@ -363,6 +365,14 @@
         .whatsapp-btn { position: fixed; bottom: 20px; right: 20px; background-color: #25d366; color: white; border-radius: 50%; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 1000; transition: transform 0.3s; }
         .whatsapp-btn:hover { transform: scale(1.15); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
         .whatsapp-btn svg { width: 35px; height: 35px; fill: currentColor; }
+
+        /* ESTILOS DE IMPRESIÓN PARA EL CERTIFICADO */
+        @media print {
+            body * { visibility: hidden; }
+            #certificadoImprimible, #certificadoImprimible * { visibility: visible; }
+            #certificadoImprimible { position: absolute; left: 0; top: 0; width: 100%; border: none !important; box-shadow: none !important; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -415,6 +425,7 @@
         <button class="tab-btn activa" id="tab-inscripcion" onclick="cambiarPestana('inscripcion', this)">📝 Registro Oficial</button>
         <button class="tab-btn" id="tab-torneo" onclick="cambiarPestana('torneo', this)">🎱 Iniciar Torneo</button>
         <button class="tab-btn" id="tab-finales" onclick="cambiarPestana('finales', this)">🏆 Muerte Súbita</button>
+        <button class="tab-btn" id="tab-manual" onclick="cambiarPestana('manual', this)">📖 Manual de Uso</button>
     </nav>
 
     <!-- PANTALLA DE LA RULETA EN VIVO FÍSICA -->
@@ -469,16 +480,44 @@
         </div>
     </div>
 
+    <!-- MODAL PARA GENERAR CERTIFICADOS -->
+    <div id="modalCertificado" class="modal-overlay">
+        <div class="card modal-content" id="certificadoImprimible" style="background: #fff; color: #000; text-align: center; border: 12px solid #d4af37; border-radius: 5px; padding: 40px; background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); box-shadow: 0 10px 40px rgba(0,0,0,0.8); max-width: 700px;">
+            <div style="border: 2px solid #d4af37; padding: 30px;">
+                <h1 style="color: #d4af37; font-family: 'Georgia', serif; font-size: 32px; text-transform: uppercase; margin-bottom: 5px;">Certificado de Excelencia</h1>
+                <h3 style="color: #333; letter-spacing: 2px; margin-top: 0;">Club Billiards Montpellier</h3>
+                
+                <p style="font-size: 18px; margin-top: 30px; font-weight: 600;">Se otorga el presente reconocimiento a:</p>
+                <h2 id="certNombre" style="font-size: 36px; color: #000; border-bottom: 2px solid #d4af37; display: inline-block; padding: 0 20px 10px; font-style: italic; margin-top: 10px;">Nombre del Jugador</h2>
+                
+                <p id="certMotivo" style="font-size: 22px; font-weight: bold; color: #555; margin-top: 25px;">Por haberse consagrado CAMPEÓN del Torneo</p>
+                
+                <p style="font-size: 14px; color: #777; margin-top: 40px;">Otorgado en Bogotá D.C., a los <span id="certFecha" style="font-weight: bold;"></span></p>
+                
+                <div style="margin-top: 40px; display: flex; justify-content: center; gap: 50px;">
+                    <div style="text-align: center;">
+                        <div style="border-bottom: 1px solid #000; width: 150px; margin: 0 auto;"></div>
+                        <p style="font-size: 12px; margin-top: 5px; font-weight: bold;">La Administración</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="no-print" style="margin-top: 25px; display: flex; gap: 15px; justify-content: center;">
+                <button onclick="window.print()" class="btn-accion" style="background: #00d8d6; color:#000; max-width: 250px;">🖨️ Imprimir / Guardar PDF</button>
+                <button onclick="document.getElementById('modalCertificado').style.display='none'" class="btn-accion" style="background: #e74c3c; color:#fff; max-width: 150px;">❌ Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- SECCIÓN 1: INSCRIPCIÓN -->
     <section id="seccion-inscripcion" class="seccion activa">
         <h1 class="titulo-seccion">Inscripción al Torneo - Montpellier</h1>
         <article class="card">
             
             <div class="aviso-importante">
-                <p>⚠️ <strong>IMPORTANTE:</strong> La categoría seleccionada debe ser previamente consultada y autorizada por la organización de <strong>Billiards Montpellier</strong>.</p>
-                <p>💵 <strong>PAGOS:</strong> Solo se marcará "Al día" cuando la administración valide el comprobante de pago de la inscripción.</p>
-                <p>🚫 <strong>CUPOS LIMITADOS:</strong> El día del torneo NO se asegura cupo si previamente ya se completó el cuadro.</p>
-                <p>📌 <strong>REQUISITO OBLIGATORIO:</strong> Seguir nuestra cuenta oficial en Instagram: <a href="https://www.instagram.com/billiardsmontpellier/" target="_blank">@billiardsmontpellier</a></p>
+                <p>⚠️ <strong>IMPORTANTE:</strong> La categoría seleccionada debe ser autorizada por la organización de <strong>Billiards Montpellier</strong>.</p>
+                <p>💵 <strong>PAGOS:</strong> Solo se marcará "Al día" cuando la administración valide el pago de la inscripción.</p>
+                <p>🎯 <strong>NUEVO:</strong> Gana quien alcanza su meta primero, sin importar el puntaje. Además se premiará con certificado a la <strong>Tacada Más Larga</strong> del torneo.</p>
             </div>
 
             <form id="registroForm">
@@ -569,6 +608,12 @@
         </div>
     </section>
 
+    <!-- SECCIÓN 4: MANUAL -->
+    <section id="seccion-manual" class="seccion">
+        <h1 class="titulo-seccion">Manual de Uso del Torneo</h1>
+        <iframe src="manual.html" title="Manual de uso del torneo" loading="lazy" style="width:100%; height:82vh; min-height:520px; border:0; border-radius:12px; background:rgba(255,255,255,0.95);"></iframe>
+    </section>
+
     <!-- FOOTER SEO LOCAL -->
     <footer class="footer-seo">
         <p><strong>Billiards Montpellier</strong> | Club de Billar a 3 Bandas y Competencia</p>
@@ -580,7 +625,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, setDoc, getDoc, updateDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // CONFIGURACIÓN DE FIREBASE (Se usan colecciones independientes para Montpellier)
+        // CONFIGURACIÓN DE FIREBASE PARA MONTPELLIER (Conservada)
         const firebaseConfig = {
             apiKey: "AIzaSyB10yXxA6Oyvz-xDyJuX7RKj7QhNju85mo",
             authDomain: "mansioncarambola.firebaseapp.com",
@@ -594,7 +639,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Nombres de colecciones exclusivas para Billiards Montpellier
+        // Nombres de colecciones exclusivas
         const COL_JUGADORES = "jugadores_montpellier";
         const COL_TORNEOS = "torneos_montpellier";
 
@@ -606,12 +651,43 @@
         window.inscritosGlobal = [];
         window.grupos = [];
         window.faseEliminacion = { rondas: [], rondaActiva: 0, campeon: null };
+        window.mayorTacada = { jugador: null, valor: 0 };
         window.torneoActivo = false;
         window.tipoTorneo = 'matamata'; 
         window.premiacion = { primero: "", segundo: "" };
         window.ultimaHoraGlobal = "18:00";
 
         function getMeta(categoria) { return window.tipoTorneo === 'matamata' ? metasMataMata[categoria] : metasClasico[categoria]; }
+
+        // Nueva lógica de victoria (Esmeralda): Gana quien alcanza la meta primero.
+        function llegoAMeta(jugador, carambolas) {
+            if(!jugador || jugador.esLibre) return true;
+            return carambolas >= (getMeta(jugador.categoria) || 1);
+        }
+
+        // Recalcular la mayor tacada basada en todos los partidos jugados
+        window.recalcularMayorTacada = function() {
+            window.mayorTacada = { jugador: null, valor: 0 };
+            
+            // Revisar Grupos
+            window.grupos.forEach(g => {
+                g.partidos.forEach(p => {
+                    if (p.jugado) {
+                        if (p.tm1 > window.mayorTacada.valor) { window.mayorTacada.valor = p.tm1; window.mayorTacada.jugador = p.j1; }
+                        if (p.tm2 > window.mayorTacada.valor) { window.mayorTacada.valor = p.tm2; window.mayorTacada.jugador = p.j2; }
+                    }
+                });
+            });
+            // Revisar Finales
+            window.faseEliminacion.rondas.forEach(r => {
+                r.partidos.forEach(p => {
+                    if (p.jugado) {
+                        if (p.tm1 > window.mayorTacada.valor) { window.mayorTacada.valor = p.tm1; window.mayorTacada.jugador = p.j1; }
+                        if (p.tm2 > window.mayorTacada.valor) { window.mayorTacada.valor = p.tm2; window.mayorTacada.jugador = p.j2; }
+                    }
+                });
+            });
+        };
 
         window.actualizarSelectsCategorias = function() {
             const selects = [document.getElementById('categoria'), document.getElementById('editCategoria')];
@@ -671,7 +747,8 @@
                 const datosLimpios = JSON.parse(JSON.stringify({ 
                     activo: window.torneoActivo, tipoTorneo: window.tipoTorneo,
                     grupos: window.grupos, faseEliminacion: window.faseEliminacion, 
-                    premiacion: window.premiacion, ultimaHora: window.ultimaHoraGlobal
+                    premiacion: window.premiacion, ultimaHora: window.ultimaHoraGlobal,
+                    mayorTacada: window.mayorTacada
                 }));
                 await setDoc(doc(db, COL_TORNEOS, "actual"), datosLimpios); 
             } catch (error) { console.error("Error al guardar estado:", error); }
@@ -692,11 +769,13 @@
                         window.faseEliminacion = data.faseEliminacion || { rondas: [], rondaActiva: 0, campeon: null };
                         window.premiacion = data.premiacion || { primero: "", segundo: "" };
                         window.ultimaHoraGlobal = data.ultimaHora || "18:00";
+                        window.mayorTacada = data.mayorTacada || { jugador: null, valor: 0 };
                         
                         document.getElementById('panelConfiguracion').style.display = 'none';
                         document.getElementById('btnTerminarTorneo').style.display = 'inline-block';
                         document.getElementById('tipoTorneoConfig').value = window.tipoTorneo;
                         mostrarPremiacion();
+                        window.recalcularMayorTacada();
 
                         let tieneFinales = window.faseEliminacion.rondas && window.faseEliminacion.rondas.length > 0;
 
@@ -728,6 +807,7 @@
             if (password !== "2026*") { alert("❌ Contraseña incorrecta."); return; }
             if(confirm("¡ATENCIÓN! ¿Seguro que deseas finalizar el torneo?\nEsto limpiará el cuadro por completo y ELIMINARÁ A TODOS LOS JUGADORES INSCRITOS para el próximo evento.")) {
                 window.torneoActivo = false; window.grupos = []; window.faseEliminacion = { rondas: [], rondaActiva: 0, campeon: null };
+                window.mayorTacada = { jugador: null, valor: 0 };
                 
                 try {
                     const querySnapshot = await getDocs(collection(db, COL_JUGADORES));
@@ -974,7 +1054,7 @@
                 let mesaIndex = (i/2) % 5;
                 let mesaNumero = mesaIndex + 1;
                 
-                let partido = { j1: j1, j2: j2, s1: 0, s2: 0, jugado: false, ganador: null, horaInt: tiemposMesas[mesaIndex], mesa: mesaNumero };
+                let partido = { j1: j1, j2: j2, s1: 0, s2: 0, tm1: 0, tm2: 0, jugado: false, ganador: null, horaInt: tiemposMesas[mesaIndex], mesa: mesaNumero };
 
                 if(j2.esLibre) {
                     partido.jugado = true; partido.ganador = j1;
@@ -1082,6 +1162,7 @@
                 window.premiacion.segundo = document.getElementById('inPremio2').value || "Efectivo";
                 window.ultimaHoraGlobal = document.getElementById('horaInicio').value; 
                 window.grupos = []; window.faseEliminacion = { rondas: [], rondaActiva: 0, campeon: null };
+                window.mayorTacada = { jugador: null, valor: 0 };
 
                 await guardarEstadoTorneo();
 
@@ -1099,9 +1180,9 @@
                         let nombreGrupo = `GRUPO ${String.fromCharCode(65 + gIdx)}`;
 
                         let partidosGrupo = [];
-                        if(p.length >= 2) partidosGrupo.push({ j1: p[0], j2: p[1], s1: '', s2: '', jugado: false });
-                        if(p.length >= 3) partidosGrupo.push({ j1: p[0], j2: p[2], s1: '', s2: '', jugado: false }, { j1: p[1], j2: p[2], s1: '', s2: '', jugado: false });
-                        if(p.length === 4) { partidosGrupo = [ { j1: p[0], j2: p[1], s1: '', s2: '', jugado: false }, { j1: p[2], j2: p[3], s1: '', s2: '', jugado: false }, { j1: p[0], j2: p[2], s1: '', s2: '', jugado: false }, { j1: p[1], j2: p[3], s1: '', s2: '', jugado: false }, { j1: p[0], j2: p[3], s1: '', s2: '', jugado: false }, { j1: p[1], j2: p[2], s1: '', s2: '', jugado: false } ]; }
+                        if(p.length >= 2) partidosGrupo.push({ j1: p[0], j2: p[1], s1: '', s2: '', tm1: '', tm2: '', jugado: false });
+                        if(p.length >= 3) partidosGrupo.push({ j1: p[0], j2: p[2], s1: '', s2: '', tm1: '', tm2: '', jugado: false }, { j1: p[1], j2: p[2], s1: '', s2: '', tm1: '', tm2: '', jugado: false });
+                        if(p.length === 4) { partidosGrupo = [ { j1: p[0], j2: p[1], s1: '', s2: '', tm1: '', tm2: '', jugado: false }, { j1: p[2], j2: p[3], s1: '', s2: '', tm1: '', tm2: '', jugado: false }, { j1: p[0], j2: p[2], s1: '', s2: '', tm1: '', tm2: '', jugado: false }, { j1: p[1], j2: p[3], s1: '', s2: '', tm1: '', tm2: '', jugado: false }, { j1: p[0], j2: p[3], s1: '', s2: '', tm1: '', tm2: '', jugado: false }, { j1: p[1], j2: p[2], s1: '', s2: '', tm1: '', tm2: '', jugado: false } ]; }
                         
                         partidosGrupo.forEach(partido => {
                             partido.horaInt = tiemposMesas[mesaIndex]; partido.mesa = mesaNumero; 
@@ -1157,7 +1238,7 @@
                     document.getElementById('btnGenerarFinales').style.display = 'block';
 
                 } else {
-                    document.getElementById('contenedorGrupos').innerHTML = '<h3 style="color:#aaa;">Modo MATA MATA Activo. El torneo se desarrolla en la pestaña de Gran Final.</h3>';
+                    document.getElementById('contenedorGrupos').innerHTML = '<h3 style="color:#aaa;">Modo MATA MATA Activo. El torneo se desarrolla en la pestaña de Muerte Súbita.</h3>';
                     await ejecutarSorteoRondaRuleta(jugadoresAptos, "RONDA 1");
                 }
             }
@@ -1190,14 +1271,6 @@
             await ejecutarSorteoRondaRuleta(ganadores, titulo);
         }
 
-        function mostrarPremiacion() {
-            if(window.premiacion.primero !== "") {
-                document.getElementById('placaPremiacion').style.display = 'block';
-                document.getElementById('txtPremio1').textContent = window.premiacion.primero;
-                document.getElementById('txtPremio2').textContent = window.premiacion.segundo;
-            }
-        }
-
         // --- SISTEMA DE CORRECCIÓN ---
         window.revertirMarcadorGrupo = async function(gIdx, pIdx) {
             const password = prompt("Seguridad del Sistema:\nIngrese clave de administrador para corregir el marcador:");
@@ -1215,13 +1288,20 @@
             j2.car -= partido.s2; j2.pj -= 1;
 
             if (partido.s1 === 0 && partido.s2 === 0) {
-            } else if (partido.s1 > partido.s2) j1.pts -= 3;
-            else if (partido.s2 > partido.s1) j2.pts -= 3;
-            else { j1.pts -= 1; j2.pts -= 1; }
+            } else if (llegoAMeta(j1, partido.s1)) j1.pts -= 3;
+            else if (llegoAMeta(j2, partido.s2)) j2.pts -= 3;
+            else { 
+                let m1 = getMeta(j1.categoria); let m2 = getMeta(j2.categoria);
+                if (partido.s1/m1 > partido.s2/m2) j1.pts -= 3;
+                else if (partido.s2/m2 > partido.s1/m1) j2.pts -= 3;
+                else { j1.pts -= 1; j2.pts -= 1; }
+            }
 
             partido.jugado = false;
-            partido.s1 = '';
-            partido.s2 = '';
+            partido.s1 = ''; partido.s2 = '';
+            partido.tm1 = ''; partido.tm2 = '';
+
+            window.recalcularMayorTacada();
 
             grupo.participantes.sort((a, b) => b.pts - a.pts || b.car - a.car);
             renderizarGrupos();
@@ -1244,38 +1324,57 @@
             let partido = window.faseEliminacion.rondas[rIdx].partidos[pIdx];
             partido.jugado = false;
             partido.ganador = null;
-            partido.s1 = '';
-            partido.s2 = '';
+            partido.s1 = ''; partido.s2 = '';
+            partido.tm1 = ''; partido.tm2 = '';
+
+            window.recalcularMayorTacada();
 
             renderizarFaseFinal();
             await guardarEstadoTorneo();
         };
 
-        // --- GUARDADO DE RESULTADOS ---
+        // --- GUARDADO DE RESULTADOS (Con Lógica de Metas y Tacadas) ---
         window.guardarResultadoGrupo = async function(gIdx, pIdx) {
             const inputS1 = document.getElementById(`g${gIdx}p${pIdx}s1`).value;
             const inputS2 = document.getElementById(`g${gIdx}p${pIdx}s2`).value;
+            const inputTm1 = document.getElementById(`g${gIdx}p${pIdx}tm1`).value;
+            const inputTm2 = document.getElementById(`g${gIdx}p${pIdx}tm2`).value;
             const s1 = parseInt(inputS1) || 0;
             const s2 = parseInt(inputS2) || 0;
+            const tm1 = parseInt(inputTm1) || 0;
+            const tm2 = parseInt(inputTm2) || 0;
             
             const grupo = window.grupos[gIdx]; const partido = grupo.partidos[pIdx];
-
             if(partido.jugado) return;
-
-            if (s1 === 0 && s2 === 0) {
-                if(!confirm("⚠️ Ambos marcadores están en 0.\n¿Confirmas Doble W.O. (Ninguno sumará puntos)?")) return;
-            }
-
-            partido.s1 = s1; partido.s2 = s2; partido.jugado = true;
 
             let j1 = grupo.participantes.find(p => p.id === partido.j1.id);
             let j2 = grupo.participantes.find(p => p.id === partido.j2.id);
-            j1.car += s1; j1.pj += 1; j2.car += s2; j2.pj += 1;
+
+            if (s1 === 0 && s2 === 0) {
+                if(!confirm("⚠️ Ambos marcadores están en 0.\n¿Confirmas Doble W.O. (Ninguno sumará puntos)?")) return;
+            } else if (llegoAMeta(j1, s1) && llegoAMeta(j2, s2)) {
+                alert("Ambos jugadores indican haber llegado a la meta.\nSolo el jugador que llegó a la meta PRIMERO puede tener el marcador completo, o hubo un error en la digitación."); return;
+            }
+
+            partido.s1 = s1; partido.s2 = s2; 
+            partido.tm1 = tm1; partido.tm2 = tm2;
+            partido.jugado = true;
+
+            j1.car += s1; j1.pj += 1; 
+            j2.car += s2; j2.pj += 1; 
             
             if (s1 === 0 && s2 === 0) {
-            } else if (s1 > s2) j1.pts += 3; 
-            else if (s2 > s1) j2.pts += 3; 
-            else { j1.pts += 1; j2.pts += 1; }
+            } else if (llegoAMeta(j1, s1)) j1.pts += 3; 
+            else if (llegoAMeta(j2, s2)) j2.pts += 3; 
+            else { 
+                // Expiró el tiempo, se decide por porcentaje
+                let m1 = getMeta(j1.categoria); let m2 = getMeta(j2.categoria);
+                if (s1/m1 > s2/m2) j1.pts += 3;
+                else if (s2/m2 > s1/m1) j2.pts += 3;
+                else { j1.pts += 1; j2.pts += 1; } // Empate
+            }
+
+            window.recalcularMayorTacada();
 
             grupo.participantes.sort((a, b) => b.pts - a.pts || b.car - a.car);
             renderizarGrupos(); await guardarEstadoTorneo();
@@ -1284,26 +1383,44 @@
         window.guardarMarcadorFinal = async function(rIdx, pIdx) {
             const inputS1 = document.getElementById(`f_r${rIdx}p${pIdx}s1`).value;
             const inputS2 = document.getElementById(`f_r${rIdx}p${pIdx}s2`).value;
+            const inputTm1 = document.getElementById(`f_r${rIdx}p${pIdx}tm1`).value;
+            const inputTm2 = document.getElementById(`f_r${rIdx}p${pIdx}tm2`).value;
             const s1 = parseInt(inputS1) || 0;
             const s2 = parseInt(inputS2) || 0;
+            const tm1 = parseInt(inputTm1) || 0;
+            const tm2 = parseInt(inputTm2) || 0;
             
+            let partido = window.faseEliminacion.rondas[rIdx].partidos[pIdx];
+
             if (s1 === 0 && s2 === 0) {
                 if(!confirm("⚠️ Ambos marcadores están en 0.\n¿Confirmas que AMBOS JUGADORES QUEDAN ELIMINADOS (Doble W.O.)?")) return;
-            } else if(s1 === s2) { 
-                alert("Sin empates en Muerte Súbita. Debe haber un ganador."); 
-                return; 
+            } else if (llegoAMeta(partido.j1, s1) && llegoAMeta(partido.j2, s2)) {
+                alert("Ambos jugadores indican haber llegado a la meta.\nEn Muerte Súbita solo gana quien llegó a su meta primero."); return;
             }
 
-            let partido = window.faseEliminacion.rondas[rIdx].partidos[pIdx];
-            partido.s1 = s1;
-            partido.s2 = s2;
+            partido.s1 = s1; partido.s2 = s2;
+            partido.tm1 = tm1; partido.tm2 = tm2;
             partido.jugado = true;
             
             if (s1 === 0 && s2 === 0) {
                 partido.ganador = { id: 'doble_wo', nombre: '🚫 AMBOS ELIMINADOS', categoria: 'Amateur', foto: generarAvatarBillar('X'), claseColor: 'bg-amateur', esLibre: true };
             } else {
-                partido.ganador = (s1 > s2) ? partido.j1 : partido.j2;
+                if (llegoAMeta(partido.j1, s1)) partido.ganador = partido.j1;
+                else if (llegoAMeta(partido.j2, s2)) partido.ganador = partido.j2;
+                else {
+                    // Si terminó el tiempo, decidir por el mayor porcentaje respecto a la meta
+                    let m1 = getMeta(partido.j1.categoria); let m2 = getMeta(partido.j2.categoria);
+                    if (s1/m1 > s2/m2) partido.ganador = partido.j1;
+                    else if (s2/m2 > s1/m1) partido.ganador = partido.j2;
+                    else {
+                        alert("Empate total en porcentajes. El sistema requiere un ganador para avanzar en muerte súbita (define el desempate en la mesa y registra la carambola de oro)."); 
+                        partido.jugado = false;
+                        return;
+                    }
+                }
             }
+
+            window.recalcularMayorTacada();
 
             verificarAvanceRonda(rIdx); renderizarFaseFinal(); await guardarEstadoTorneo(); 
         };
@@ -1323,6 +1440,38 @@
                 }
             } else {
                 document.getElementById('btnSiguienteRonda').style.display = 'none';
+            }
+        }
+
+        // --- SISTEMA DE CERTIFICADOS ---
+        window.mostrarCertificado = function(tipo) {
+            let nombre = "";
+            let motivo = "";
+            const fechaActual = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+            
+            if(tipo === 'campeon') {
+                nombre = window.faseEliminacion.campeon?.nombre || "Jugador";
+                motivo = "Por haberse consagrado <strong>CAMPEÓN</strong> del Torneo.";
+            } else if (tipo === 'tacada') {
+                if(!window.mayorTacada || !window.mayorTacada.jugador) {
+                    alert("Aún no hay registros de tacadas en el torneo."); return;
+                }
+                nombre = window.mayorTacada.jugador.nombre;
+                motivo = `Por realizar la <strong>TACADA MÁS LARGA</strong> del Torneo, con un total de <strong>${window.mayorTacada.valor}</strong> carambolas consecutivas.`;
+            }
+
+            document.getElementById('certNombre').textContent = nombre;
+            document.getElementById('certMotivo').innerHTML = motivo;
+            document.getElementById('certFecha').textContent = fechaActual;
+            
+            document.getElementById('modalCertificado').style.display = 'flex';
+        }
+
+        function mostrarPremiacion() {
+            if(window.premiacion.primero !== "") {
+                document.getElementById('placaPremiacion').style.display = 'block';
+                document.getElementById('txtPremio1').textContent = window.premiacion.primero;
+                document.getElementById('txtPremio2').textContent = window.premiacion.segundo;
             }
         }
 
@@ -1347,9 +1496,14 @@
                         </div>`;
                     
                     if(!partido.jugado) {
-                        html += `<div class="inputs-marcador"><input type="number" id="g${gIdx}p${pIdx}s1" class="input-score" placeholder="Pts"><input type="number" id="g${gIdx}p${pIdx}s2" class="input-score" placeholder="Pts"></div><button class="btn-guardar-score" onclick="guardarResultadoGrupo(${gIdx}, ${pIdx})">💾 Guardar Marcador</button>`;
+                        html += `<div class="inputs-marcador">
+                                    <div style="width: 48%;"><input type="number" id="g${gIdx}p${pIdx}s1" class="input-score" placeholder="Pts"><input type="number" id="g${gIdx}p${pIdx}tm1" class="input-tacada" placeholder="Serie Max"></div>
+                                    <div style="width: 48%;"><input type="number" id="g${gIdx}p${pIdx}s2" class="input-score" placeholder="Pts"><input type="number" id="g${gIdx}p${pIdx}tm2" class="input-tacada" placeholder="Serie Max"></div>
+                                 </div>
+                                 <button class="btn-guardar-score" onclick="guardarResultadoGrupo(${gIdx}, ${pIdx})">💾 Guardar Marcador</button>`;
                     } else {
                         html += `<div style="color: #ffd32a; font-size: 20px; font-weight: bold; margin-top: 10px;">${partido.s1} - ${partido.s2}</div>
+                                 <div style="color: #00d8d6; font-size: 11px; margin-bottom: 5px;">Tacadas Mayores: ${partido.tm1 || 0} / ${partido.tm2 || 0}</div>
                                  <div style="display:flex; justify-content:center; gap:10px; align-items:center; margin-top: 5px;">
                                      <div style="color: #05c46b; font-size: 12px;">Finalizado</div>
                                      <button class="btn-corregir-score" onclick="revertirMarcadorGrupo(${gIdx}, ${pIdx})">✏️ Corregir</button>
@@ -1370,6 +1524,10 @@
                     🏆 ¡GRAN CAMPEÓN BILLIARDS MONTPELLIER! 🏆<br>
                     <img src="${window.faseEliminacion.campeon.foto}" class="avatar" style="width:80px;height:80px;margin-top:15px;border:3px solid #000;">
                     <br>${window.faseEliminacion.campeon.nombre}
+                    <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+                        <button class="btn-hero-primary" onclick="mostrarCertificado('campeon')" style="font-size: 12px; padding: 10px;">📜 Certificado Campeón</button>
+                        ${(window.mayorTacada && window.mayorTacada.jugador) ? `<button class="btn-hero-secondary" onclick="mostrarCertificado('tacada')" style="font-size: 12px; padding: 10px; background: #00d8d6; color: #000; border-color: #000;">🏅 Certificado Mayor Tacada (${window.mayorTacada.valor})</button>` : ''}
+                    </div>
                 </div>`;
             }
 
@@ -1395,12 +1553,17 @@
 
                     if(!partido.jugado) {
                         if(partido.j1 && partido.j2 && partido.j1.nombre !== 'Esperando...' && partido.j2.nombre !== 'Esperando...') {
-                            html += `<div class="inputs-marcador"><input type="number" id="f_r${rIdx}p${pIdx}s1" class="input-score" placeholder="Pts"><input type="number" id="f_r${rIdx}p${pIdx}s2" class="input-score" placeholder="Pts"></div><button class="btn-guardar-score" style="background: linear-gradient(45deg, #ff3f34, #ff5e57);" onclick="guardarMarcadorFinal(${rIdx}, ${pIdx})">💾 Guardar y Avanzar</button>`;
+                            html += `<div class="inputs-marcador">
+                                        <div style="width: 48%;"><input type="number" id="f_r${rIdx}p${pIdx}s1" class="input-score" placeholder="Pts"><input type="number" id="f_r${rIdx}p${pIdx}tm1" class="input-tacada" placeholder="Serie Max"></div>
+                                        <div style="width: 48%;"><input type="number" id="f_r${rIdx}p${pIdx}s2" class="input-score" placeholder="Pts"><input type="number" id="f_r${rIdx}p${pIdx}tm2" class="input-tacada" placeholder="Serie Max"></div>
+                                     </div>
+                                     <button class="btn-guardar-score" style="background: linear-gradient(45deg, #ff3f34, #ff5e57);" onclick="guardarMarcadorFinal(${rIdx}, ${pIdx})">💾 Guardar y Avanzar</button>`;
                         } else {
                             html += `<div style="color: #aaa; margin-top:10px;">Esperando resultados anteriores...</div>`;
                         }
                     } else {
                         html += `<div style="color: #ffd32a; font-size: 24px; font-weight: bold; margin-top: 15px;">${partido.s1} - ${partido.s2}</div>
+                                 <div style="color: #00d8d6; font-size: 11px; margin-bottom: 5px;">Tacadas Mayores: ${partido.tm1 || 0} / ${partido.tm2 || 0}</div>
                                  <div style="display:flex; justify-content:center; gap:10px; align-items:center; margin-top: 5px;">`;
                         
                         if(partido.ganador && partido.ganador.nombre === '🚫 AMBOS ELIMINADOS') {
