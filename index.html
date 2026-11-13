@@ -1590,3 +1590,57 @@
     </script>
 </body>
 </html>
+<script>
+(function () {
+  var html = [
+    '<h1 class="titulo-seccion">Manual de uso del torneo</h1>',
+    '<article class="card">',
+    '<h3>1. Inscribir jugadores</h3>',
+    '<ol>',
+    '<li>Escribe el nombre completo del deportista.</li>',
+    '<li>Elige la categoría: Master (meta 12), Intermedio (meta 9), Normal (meta 7) o Amateur (meta 5).</li>',
+    '<li>Marca "Inscripción Pagada (Al día)" solo cuando la administración haya validado el comprobante. Sin esa marca el jugador queda registrado, pero no entra al sorteo.</li>',
+    '<li>Pulsa "Registrar Jugador en Montpellier".</li>',
+    '</ol>',
+    '<p>Para editar o eliminar un jugador, haz clic sobre él en la tabla. La aplicación pide la clave de administración antes de cambiar o borrar datos.</p>',
+    '</article>',
+    '<article class="card">',
+    '<h3>2. Elegir la modalidad y los premios</h3>',
+    '<p>En la pestaña "Iniciar Torneo" elige la modalidad:</p>',
+    '<ul>',
+    '<li><strong>Mata Mata:</strong> eliminación directa desde el inicio.</li>',
+    '<li><strong>Torneo Clásico:</strong> fase de grupos y luego eliminación.</li>',
+    '</ul>',
+    '<p>Define la hora de inicio y los premios de campeón y subcampeón antes de sortear.</p>',
+    '</article>',
+    '<article class="card">',
+    '<h3>3. Sorteo con ruleta</h3>',
+    '<p>Pulsa "Iniciar Sorteo Oficial con Ruleta". La ruleta se muestra en pantalla completa y asigna las mesas a los jugadores con pago confirmado. Cada cruce queda registrado con su mesa y su horario.</p>',
+    '</article>',
+    '<article class="card">',
+    '<h3>4. Partidos y marcadores</h3>',
+    '<p>En cada partido escribe las carambolas de cada jugador y la tacada más larga que hizo. Después pulsa "Guardar y Avanzar" para pasar al ganador. Usa "Corregir" si necesitas cambiar un resultado.</p>',
+    '<p>La partida termina cuando un jugador llega a su meta, y gana quien llega primero.</p>',
+    '</article>',
+    '<article class="card">',
+    '<h3>5. Tacada más larga</h3>',
+    '<p>La tacada más larga se registra en cada partido. Al terminar el torneo, la aplicación muestra quién hizo la tacada más larga del campeonato.</p>',
+    '</article>',
+    '<article class="card">',
+    '<h3>6. Rondas y campeón</h3>',
+    '<p>Cuando todos los partidos de una ronda tengan resultado, pulsa "Sortear Siguiente Ronda en Vivo". Al final se muestra el campeón.</p>',
+    '<p>Para el certificado del campeón, pulsa "Imprimir / Guardar PDF". Se abre el diálogo de impresión: elige "Guardar como PDF".</p>',
+    '</article>',
+    '<article class="card">',
+    '<h3>7. Cerrar el torneo</h3>',
+    '<p>Pulsa "Finalizar Torneo Actual y Limpiar Sistema" solo cuando el torneo haya terminado y los premios estén entregados, porque limpia los datos actuales.</p>',
+    '</article>'
+  ].join('');
+  function pintarManual() {
+    var s = document.getElementById('seccion-manual');
+    if (s) s.innerHTML = html;
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pintarManual);
+  else pintarManual();
+})();
+</script>
