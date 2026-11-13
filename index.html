@@ -1644,3 +1644,45 @@
   else pintarManual();
 })();
 </script>
+<script>
+(function () {
+  var html = [
+    '<section id="marketing" style="background:#081820;padding:48px 20px;color:#ecf0f1;">',
+    '<div style="max-width:1100px;margin:0 auto;">',
+    '<h2 style="color:#00d8d6;text-align:center;text-transform:uppercase;letter-spacing:2px;">Plan de marketing digital para tus torneos</h2>',
+    '<p style="text-align:center;color:#cfd8dc;">Promociona cada torneo, graba la jornada y atrae jugadores nuevos todos los meses.</p>',
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:24px;">',
+    '<div class="card"><h3>Plan Básico</h3><p><strong>$350.000 al mes</strong></p><ul><li>12 publicaciones al mes (3 semanales)</li><li>Administración de la pauta</li><li>Diseñador asignado</li><li>Plan de trabajo con métricas semanales</li></ul></div>',
+    '<div class="card"><h3>Promoción de torneos</h3><p><strong>Todos los primeros lunes del mes</strong></p><ul><li>Campaña de promoción antes de cada torneo</li><li>Publicación el día del torneo</li><li>Invitación a jugadores nuevos</li></ul></div>',
+    '<div class="card"><h3>Grabación por torneo</h3><p><strong>$300.000 por torneo (adicional)</strong></p><ul><li>Sesión de grabación de la jornada</li><li>Edición de clips para redes</li><li>Clip de la tacada más larga</li></ul></div>',
+    '<div class="card"><h3>Agente IA (opcional)</h3><p><strong>$80.000 a $100.000 adicionales al mes</strong></p><ul><li>Responde consultas de inscripción y horarios</li><li>Atiende a jugadores nuevos por WhatsApp</li></ul></div>',
+    '<div class="card"><h3>Landing web</h3><p><strong>$100.000 al mes</strong></p><ul><li>Actualización mensual de la página</li><li>Fechas, resultados y fotos del torneo</li></ul></div>',
+    '</div>',
+    '<div class="card" style="margin-top:24px;"><h3>Inversión en pauta</h3><p>Mínimo <strong>$10.000 diarios</strong> (aprox. $300.000 al mes) para atraer personas nuevas a los torneos. Esta inversión se paga directamente a Meta, no a la agencia.</p></div>',
+    '<div class="card" style="margin-top:24px;"><h3>Estimado mensual</h3><ul><li>Plan Básico: $350.000</li><li>Grabación de 1 torneo: $300.000</li><li>Landing web: $100.000</li><li><strong>Subtotal de servicios: $750.000</strong></li><li>Agente IA (opcional): $80.000 a $100.000</li><li>Pauta mínima en Meta: $300.000</li><li><strong>Total estimado: $1.130.000 a $1.150.000</strong></li></ul></div>',
+    '<div class="card" style="margin-top:24px;"><h3>Propuestas para vender más billar</h3><ul>',
+    '<li><strong>Liga mensual:</strong> tabla de posiciones y premios acumulados por temporada.</li>',
+    '<li><strong>Torneo de principiantes:</strong> inscripción económica para captar jugadores nuevos.</li>',
+    '<li><strong>Paquete torneo más bar:</strong> consumo incluido para quienes se inscriben.</li>',
+    '<li><strong>Referidos:</strong> descuento en la inscripción para quien trae a un jugador nuevo.</li>',
+    '<li><strong>Reservas de mesa:</strong> alquiler por horas con reserva por WhatsApp.</li>',
+    '<li><strong>Clases y entrenamiento:</strong> sesiones con jugadores Master.</li>',
+    '<li><strong>Eventos corporativos y cumpleaños:</strong> paquetes de mesas y torneo privado.</li>',
+    '<li><strong>Perfil de Google:</strong> fotos, horarios y reseñas para aparecer en búsquedas locales.</li>',
+    '<li><strong>Retargeting:</strong> volver a mostrar anuncios a quienes ya interactuaron con la página o las redes.</li>',
+    '</ul></div>',
+    '<p style="text-align:center;color:#90a4ae;font-size:13px;margin-top:20px;">Los resultados dependen de la oferta, la competencia y la inversión en pauta. No garantizamos cifras de asistencia.</p>',
+    '<p style="text-align:center;margin-top:12px;"><a href="https://wa.me/573107974153?text=Hola%2C%20quiero%20la%20propuesta%20de%20marketing%20para%20los%20torneos." target="_blank" style="color:#ffd32a;font-weight:800;">Solicitar propuesta por WhatsApp</a></p>',
+    '</div>',
+    '</section>'
+  ].join('');
+  function pintarMarketing() {
+    if (document.getElementById('marketing')) return;
+    var wrap = document.createElement('div');
+    wrap.innerHTML = html;
+    document.body.appendChild(wrap.firstChild);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pintarMarketing);
+  else pintarMarketing();
+})();
+</script>
